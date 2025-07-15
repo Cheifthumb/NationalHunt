@@ -87,7 +87,7 @@ if uploaded_file:
         X[col] = le.fit_transform(X[col].astype(str))
     X = X.fillna(-999)
 
-    model = joblib.load("models/xgboost_tuned_model_02-25.pkl")
+    model = joblib.load("models/xgboost_tuned_model_10-25.pkl")
     win_probabilities = model.predict_proba(X)[:, 1]
 
     predictions = df[info_columns].copy()
