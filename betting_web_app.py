@@ -109,13 +109,13 @@ if uploaded_file:
     daily_bankroll = 10000
     bankroll_perc = 0.1
     stake_pool = daily_bankroll * bankroll_perc
-    min_ev_threshold = 0.0
-    min_kelly_fraction = 0.0
+    min_ev_threshold = -5
+    min_kelly_fraction = -0.5
     max_odds_threshold = 100.0
     winrate_filter_type = 'none'
     fixed_winrate_threshold = 0.03
     min_runners = 5
-    max_runners = 5
+    max_runners = 10
 
     predictions['Reject_Reason'] = ''
     if rank_filter_enabled:
