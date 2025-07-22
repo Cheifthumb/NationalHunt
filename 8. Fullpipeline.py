@@ -6,7 +6,7 @@ import xgboost as xgb
 from sklearn.preprocessing import LabelEncoder
 import joblib
 
-def run_pipeline(input_file, model_path='models/xgboost_tuned_model_02-25.pkl'):
+def run_pipeline(input_file, model_path='models/xgboost_tuned_model_10-25.pkl'):
     # Derive base name (e.g., '12.07.2025')
     base_name = os.path.splitext(os.path.basename(input_file))[0]
 
@@ -56,8 +56,8 @@ def run_pipeline(input_file, model_path='models/xgboost_tuned_model_02-25.pkl'):
     daily_bankroll = 10000
     bankroll_perc = 0.1
     stake_pool = daily_bankroll * bankroll_perc
-    min_ev_threshold = 0.00
-    min_kelly_fraction = 0.00
+    min_ev_threshold = -5
+    min_kelly_fraction = -1
     max_odds_threshold = 100.0
     winrate_filter_type = 'none'
     fixed_winrate_threshold = 0.03

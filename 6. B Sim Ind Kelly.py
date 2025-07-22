@@ -18,20 +18,20 @@ data['Expected_Value'] = (data['Predicted_Win_Probability'] * (data['Odds_To_Use
 initial_bankroll = 10000
 current_bankroll = initial_bankroll
 bankroll_perc = 0.1
-min_ev_threshold = 0.00
+min_ev_threshold = -1
 min_kelly_fraction = 0.00
-min_odds_threshold = 0.00         # NEW: Don't bet below this SP
-max_odds_threshold = 11     # Existing: Don't bet above this SP
+min_odds_threshold = 1.5       # NEW: Don't bet below this SP
+max_odds_threshold = 20   # Existing: Don't bet above this SP
 
 # ✅ Win rate filter settings
 winrate_filter_type = 'none'  # Options: 'none', 'fixed', 'dynamic'
 fixed_winrate_threshold = 0.03
 
 # ✅ Rank filter: Only include predicted rank 1, 2, or 3 horses
-allowed_predicted_ranks = [1, 2, 3]
+allowed_predicted_ranks = [3,4]
 
 # ✅ Track filter
-track_filter = ['CATTERICK']
+track_filter = ['NEWBURY']
 if track_filter is not None:
     data = data[data['Track'].isin(track_filter)]
 print(f"🏇 Track Filter: {track_filter if track_filter else 'All tracks'}")
@@ -49,7 +49,7 @@ for race_id, race_df in data.groupby('Race_ID', sort=False):
         print(f"⏩ Skipping Race {race_id} (No runners match rank filter)")
         continue
 
-    if not ((4 <= full_field_size <= 6) or (full_field_size >= 41)):
+    if not ((4 <= full_field_size <= 7) or (full_field_size >= 41)):
         print(f"⏩ Skipping Race {race_id} (Field size = {full_field_size})")
         continue
 
@@ -85,7 +85,9 @@ for race_id, race_df in data.groupby('Race_ID', sort=False):
     )
 
     race_df['Stake'] = 0
-    race_df.loc[race_df['Bet_Placed'], 'Stake'] = race_df.loc[race_df['Bet_Placed'], 'Kelly_Fraction'] * stake_pool
+    race_df.loc[race_df['Bet_Placed'], 'Stake'] = (
+        race_df.loc[race_df['Bet_Placed'], 'Kelly_Fraction'] * stake_pool
+    ).apply(lambda x: max(x, current_bankroll * 0.01))
 
     total_stake = race_df['Stake'].sum()
     if total_stake > stake_pool and total_stake > 0:
